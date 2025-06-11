@@ -1,5 +1,3 @@
-# TODO(romero): Simple smart refrigerator using rich UI
-
 from rich.console import Console
 from rich.panel import Panel
 
@@ -73,7 +71,7 @@ class SmartRefrigerator:
                 console.print("❗ Try again.", style="magenta")
         return True
 
-def main():
+def menu():
     # Program entry point and menu loop
     console.print(Panel("Smart Fridge 1.0", style="magenta", expand=False))
     fridge = SmartRefrigerator(input("👤 Your name: "))
@@ -90,4 +88,4 @@ def main():
         if not fridge.handle_choice(choice):
             break
 
-main()
+menu()
