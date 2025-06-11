@@ -6,7 +6,7 @@ import os
 # Constant values
 MIN_GRADE = 70
 MAX_GRADE = 100
-MENU_EXIT = "5"
+MENU_EXIT = "6"
 YES_RESPONSE = "y"
 ZERO = 0
 INDEX_OFFSET = 1
@@ -352,12 +352,26 @@ class StudentManager:
                 "Compute another average?"):
                 break
 
+    # Method 15: Generate a brief summary of total students
+    def generate_summary(self):
+        clear_screen()
+        total_students = len(self.students)
+        print(Panel(
+            f"[bold light_cyan1]Total Registered Students: "
+            f"[bold deep_sky_blue4]{total_students}",
+            title="✎  System Summary",
+            border_style="WHITE",
+            width=40
+        ))
+        press_enter()
+
     def menu(self):
         OPTIONS = {
             "1": self.add_student,
             "2": self.add_grade,
             "3": self.view_student_info,
             "4": self.compute_average,
+            "5": self.generate_summary,
             MENU_EXIT: self.exit_program
         }
 
@@ -398,5 +412,6 @@ class StudentManager:
             "[italic steel_blue1][2] Add Grade",
             "[italic steel_blue1][3] View Student Info",
             "[italic steel_blue1][4] Compute Average",
-            "[italic steel_blue1][5] Return to Team Menu"
+            "[italic steel_blue1][5] Generate Summary",
+            "[italic steel_blue1][6] Return to Team Menu"
         ]))
