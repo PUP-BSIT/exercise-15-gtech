@@ -118,7 +118,6 @@ class Main():
         print(f"Weapon:   {self.weapon}")
         print("=" * 30)
 
-    
     def set_character(self):
         
         self.name = input("Enter a name: ")
@@ -164,7 +163,6 @@ class Main():
 
         print("YOU HAVE LEVELED UP!")
         self.character_profile()
-
 
     def generate_monster(self):
         monster_stats = self.MONSTER_STAT["monster"]
@@ -251,19 +249,16 @@ class Main():
             if self.is_player_defeated():
                 break
 
-
     def action_attack(self):
         damage = max(self.attack - self.monster_defense, 0)
         self.monster_health -= damage
         print(f"You attacked {self.monster_name} for {damage} damage.")
-
 
     def action_run(self):
         print("You chose to run away from the battle.")
         input("Press Enter to return to the menu...")
         self.health = self.original_health
         return self.menu()
-
 
     def is_monster_defeated(self):
         if self.monster_health <= 0:
@@ -278,7 +273,6 @@ class Main():
             return True
         return False
 
-
     def is_player_defeated(self):
         if self.health <= 0:
             self.clear_screen()
@@ -290,7 +284,6 @@ class Main():
             self.menu()
             return True
         return False
-
 
     def action_monster_attack(self):
         damage = max(self.monster_attack - self.defense, 0)
@@ -443,8 +436,8 @@ class Main():
             print(f"[1] Create Character")
             print(f"[2] Character Profile")
             print(f"[3] Attack a Monster")
-            print(f"[4] Attack the Boss (Coming soon...)")
-            print(f"[5] Train at Dojo (Coming soon...)")
+            print(f"[4] Attack the Boss")
+            print(f"[5] Train at Dojo")
             print(f"[0] Exit to Main Menu")
             print("=" * 30)
 
@@ -452,7 +445,6 @@ class Main():
 
             self.option_logic(choice, MENU_OPTIONS, None)
 
-    
 start = Main()
 start.menu()
         
