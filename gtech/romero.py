@@ -5,7 +5,6 @@ from rich.panel import Panel
 
 console = Console()
 
-
 class SmartRefrigerator:
     def __init__(self, owner_name):
         # Initialize refrigerator with owner name,
@@ -74,7 +73,6 @@ class SmartRefrigerator:
                 console.print("❗ Try again.", style="magenta")
         return True
 
-
 def main():
     # Program entry point and menu loop
     console.print(Panel("Smart Fridge 1.0", style="magenta", expand=False))
@@ -88,7 +86,6 @@ def main():
         console.print("[bold magenta]4.[/bold magenta] Temp")
         console.print("[bold magenta]5.[/bold magenta] Status")
         console.print("[bold magenta]6.[/bold magenta] Exit")
-       
         choice = input("👉 Option: ")
         if not fridge.handle_choice(choice):
             break
