@@ -25,7 +25,7 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 class SmartRefrigerator:
-    def __init__(self, owner_name):
+    def __init__(self, owner_name = None):
         self.owner = owner_name
         self.temperature = None  # No default temperature
         self.items = []
