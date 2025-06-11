@@ -41,12 +41,12 @@ class StudentManager:
 
     # Method 1: Display all subjects
     def display_subjects(self):
-        for index, subject in enumerate(self.SUBJECTS, start=1):
+        for index, subject in enumerate(self.SUBJECTS, start=INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {subject}")
 
     # Method 2: Display all year levels
     def display_year_levels(self):
-        for index, level in enumerate(self.YEAR_LEVELS, start=1):
+        for index, level in enumerate(self.YEAR_LEVELS, start=INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {level}")
 
     # Method 3: Return True if user inputs 'y'
@@ -336,9 +336,9 @@ class StudentManager:
                 width=30
             ))
 
-            print(f"\n[bold light_cyan1]Name: ",
-                  f"[bold deep_sky_blue4]{student_name:<10} ",
-                f"| [bold light_cyan1]Year Level: ",
+            print("\n[bold light_cyan1]Name: ",
+                f"[bold deep_sky_blue4]{student_name:<10} ",
+                "| [bold light_cyan1]Year Level: ",
                 f"[bold deep_sky_blue4]{student['year_level']}"
             )
 
