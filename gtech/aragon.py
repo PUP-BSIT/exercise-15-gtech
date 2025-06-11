@@ -328,31 +328,3 @@ class ChickFlickRecommender:
             choice = console.input("Enter your choice: ").strip()
             if self.handle_choice(choice, options):
                 break
-
-    def _handle_choice(self, choice, options):
-    # Executes the selected menu option
-        if choice in options:
-            options[choice]()
-            return choice == EXIT_OPTION
-        self.invalid_choice()
-        return False
-
-    def display_main_menu(self):
-    # Displays menu options
-        console.print(Panel(
-            "꩜ .ᐟ Set your mood to generate a chick flick movie"
-            " recommendation for you! .☘︎\n\n"
-            "[1] Set My Mood\n"
-            "[2] Get Movie Recommendations\n"
-            "[3] Get a Chick Flick Quote\n"
-            "[4] Return to Team Menu",
-            title="⋆˚࿔ Althea's Chick Flick Recommender ⋆˚࿔",
-            border_style="magenta",
-            expand=True
-        ))
-
-    def invalid_choice(self):
-    # Notifies when the user makes an invalid choice
-        console.print(f"\n\n[red]Enter a number between {MIN_MENU_OPTION}"
-                      f" and {EXIT_OPTION}.[/red]")
-        console.input("\nPress ENTER to try again.")
