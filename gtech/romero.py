@@ -132,4 +132,3 @@ class SmartRefrigerator:
 # Main program starts here
 name = input("Enter your name: ")
 fridge = SmartRefrigerator(name)
-fridge.menu()
