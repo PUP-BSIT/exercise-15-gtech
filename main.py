@@ -11,13 +11,13 @@ from gtech.romero import SmartRefrigerator
 
 console = Console()
 
-# Use None for Romero initially; we'll instantiate later
+# Delay Romero's instantiation to prompt user for input
 TEAM_MEMBERS_LIST = {
     1: ("Aragon", ChickFlickRecommender()),
     2: ("Dimayuga", RoleplayGame()),
     3: ("Lopez", MovieTicket()),
     4: ("Lim", StudentManager()),
-    5: ("Romero", None),  # Delay instantiation
+    5: ("Romero", None),  
 }
 
 ROMERO_NAME = "Romero"
