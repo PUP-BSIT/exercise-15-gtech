@@ -1,10 +1,8 @@
 # TO DO:
 # Create a module with your last name as the module name.
-# - aragon
 # - dimayuga
 # - lim
 # - lopez
-# - romero
 
 # TO DO:
 # Create a class with at least 5 methods (excluding constructor) and
