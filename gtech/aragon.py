@@ -9,88 +9,86 @@ MAX_RECOMMENDATIONS = 6
 MIN_MENU_OPTION = 1 
 INDEX_SET = 1 
 EXIT_OPTION = "4"
+MOVIES = {
+    "romantic": {
+        "movies": [
+            "The Notebook", 
+            "How to Lose a Guy in 10 Days", 
+            "Notting Hill",
+            "10 Things I Hate About You", 
+            "Letters to Juliet", 
+            "Pretty Woman"
+        ],
+        "quotes": [
+            "I want all of you, forever, you and me, every day.",
+            "Can't lose something you never had.",
+            "It was nice to meet you. Surreal but nice.",
+            "You don't always have to be who they want you to be.",
+            "You need only courage to follow your heart.",
+            "I want the fairytale."
+        ]
+    },
+    "empowered": {
+        "movies": [
+            "Legally Blonde", 
+            "The First Wives Club", 
+            "The Devil Wears Prada", 
+            "Hidden Figures"
+        ],
+        "quotes": [
+            "You must always have faith in people and"
+            " most importantly, in yourself.",
+            "Ladies, you have to be strong and independent.",
+            "A driven woman navigates her own path.",
+            "Separate and equal are two different things."
+        ]
+    },
+    "feel-good": {
+        "movies": [
+            "Mamma Mia!", 
+            "Clueless", 
+            "13 Going on 30",
+            "The Princess Diaries", 
+            "Bridesmaids"
+        ],
+        "quotes": [
+            "Here we go again, my, my, how can I resist you?",
+            "As if!",
+            "Thirty, flirty, and thriving.",
+            "No one can quit being who they really are.",
+            "I think if you're growing, then you're changing."
+        ]
+    },
+    "comedy": {
+        "movies": [
+            "Mean Girls", 
+            "Easy A", 
+            "She's the Man", 
+            "Uptown Girls"
+        ],
+        "quotes": [
+            "On Wednesdays, we wear pink.",
+            "My social life is a comedy of errors.",
+            "Nonsense! You don't need a man to wear a"
+            " beautiful dress!",
+            "Fundamentals are the building blocks of fun."
+        ]
+    }
+}
 
 console = Console()
 
 def clear():
+# Clears terminal screen 
     os.system('cls' if os.name == 'nt' else 'clear')
 
 # Main class for the Chick Flick Recommender system
 class ChickFlickRecommender:
     def __init__(self):
     # Dictionary to store movie, initializer for user mood recommended movies
-        self.movies = {}
+        self.movies = MOVIES
         self.user_mood = None
         self.recommendations = []
-
-    def load_movies(self):
-    # Loads predefined movie titles and quotes
-        self.movies = {
-            "romantic": {
-                "movies": [
-                    "The Notebook", 
-                    "How to Lose a Guy in 10 Days", 
-                    "Notting Hill",
-                    "10 Things I Hate About You", 
-                    "Letters to Juliet", 
-                    "Pretty Woman"
-                ],
-                "quotes": [
-                    "I want all of you, forever, you and me, every day.",
-                    "Can't lose something you never had.",
-                    "It was nice to meet you. Surreal but nice.",
-                    "You don't always have to be who they want you to be.",
-                    "You need only courage to follow your heart.",
-                    "I want the fairytale."
-                ]
-            },
-            "empowered": {
-                "movies": [
-                    "Legally Blonde", 
-                    "The First Wives Club", 
-                    "The Devil Wears Prada", 
-                    "Hidden Figures"
-                ],
-                "quotes": [
-                    "You must always have faith in people and most"
-                    " importantly, in yourself.",
-                    "Ladies, you have to be strong and independent.",
-                    "A driven woman navigates her own path.",
-                    "Separate and equal are two different things."
-                ]
-            },
-            "feel-good": {
-                "movies": [
-                    "Mamma Mia!", 
-                    "Clueless", 
-                    "13 Going on 30",
-                    "The Princess Diaries", 
-                    "Bridesmaids"
-                ],
-                "quotes": [
-                    "Here we go again, my, my, how can I resist you?",
-                    "As if!",
-                    "Thirty, flirty, and thriving.",
-                    "No one can quit being who they really are.",
-                    "I think if you're growing, then you're changing."
-                ]
-            },
-            "comedy": {
-                "movies": [
-                    "Mean Girls", 
-                    "Easy A", 
-                    "She's the Man", 
-                    "Uptown Girls"
-                ],
-                "quotes": [
-                    "On Wednesdays, we wear pink.",
-                    "My social life is a comedy of errors.",
-                    "Nonsense! You don't need a man to wear a" 
-                    " beautiful dress!",
-                    "Fundamentals are the building blocks of fun."
-                ]
-            }
-        }
 
     def list_moods(self):
     # Lists all available moods that the user can choose from
@@ -282,5 +280,4 @@ class ChickFlickRecommender:
         console.input("\nPress ENTER to try again.")
 
 recommender = ChickFlickRecommender()
-recommender.load_movies()
 recommender.menu()
