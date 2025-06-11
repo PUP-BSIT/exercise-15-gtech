@@ -1,91 +1,128 @@
+import os
 from rich.console import Console
 from rich.panel import Panel
+from rich import box
+
+# Constants
+DEFAULT_TEMPERATURE = 4
+EXIT_OPTION = 6
+STYLE_PANEL = "green"
+STYLE_MENU = "magenta"
+STYLE_ERROR = "red"
+STYLE_EXIT = "bold red"
+
+MENU_OPTIONS = [
+    "1. Add Item",
+    "2. Remove Item",
+    "3. List Items",
+    "4. Set Temperature",
+    "5. Show Status",
+    "6. Exit"
+]
 
 console = Console()
 
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
 class SmartRefrigerator:
     def __init__(self, owner_name):
-        # Initialize refrigerator with owner name,
-        #  default temperature, and empty item list
         self.owner = owner_name
-        self.temperature = 4
+        self.temperature = DEFAULT_TEMPERATURE
         self.items = []
 
     def add_item(self):
-         # Prompt user to add an item to the fridge
-        item = input("🔤 Item to add: ")
+        clear_screen()
+        self.print_panel("Add Item", STYLE_PANEL)
+        item = input("Item to add: ")
         self.items.append(item)
-        console.print(f"✅ [bold magenta]{item}[/bold magenta] added.")
+        console.print(f"[bold magenta]{item}[/bold magenta] added.")
 
     def remove_item(self):
-        # Prompt user to remove an item from the fridge
-        item = input("🔤 Item to remove: ")
+        clear_screen()
+        self.print_panel("Remove Item", STYLE_PANEL)
+        item = input("Item to remove: ")
         if item in self.items:
             self.items.remove(item)
-            console.print(f"🗑️ [bold magenta]{item}[/bold magenta] removed.")
+            console.print(f"[bold magenta]{item}[/bold magenta] removed.")
         else:
-            console.print(f"⚠️ [bold magenta]{item}[/bold magenta] not found.")
+            console.print(f"[bold magenta]{item}[/bold magenta] not found.", 
+                            style=STYLE_ERROR)
 
     def list_items(self):
-        #Display all current items in the refrigerator
+        clear_screen()
+        self.print_panel("List Items", STYLE_PANEL)
         if self.items:
-            console.print("📦 [bold magenta]Items:"
-            "[/bold magenta] " + ", ".join(self.items))
-
+            console.print("[bold magenta]Items:[/bold magenta] " + ", "
+                          .join(self.items))
         else:
-            console.print("📦 [bold magenta]The refrigerator is empty."
-            "[/bold magenta]")
+            console.print("[bold magenta]The refrigerator is empty."
+                             "[/bold magenta]")
 
     def set_temperature(self):
-        #Let user set a new temperature for the refrigerator
+        clear_screen()
+        self.print_panel("Set Temperature", STYLE_PANEL)
         try:
-            temp = int(input("🌡️ New temperature (°C): "))
+            temp = int(input("New temperature (°C): "))
             self.temperature = temp
-            console.print(f"🌡️ Set to [bold magenta]{temp}°C[/bold magenta].")
+            console.print(f"Temperature set to [bold magenta]{temp}°C"
+                          "[/bold magenta].")
         except ValueError:
-            console.print("❌ Enter a valid number.")
+            console.print("Enter a valid number.", style=STYLE_ERROR)
 
     def show_status(self):
-        #Display the current status of the refrigerator
-        status = f"👤 {self.owner}\n🌡️ {self.temperature}°C\n📦" 
-        "{len(self.items)} item(s)"
-        console.print(Panel(status, title="📊 Status", style="magenta"))
+        clear_screen()
+        self.print_panel("Fridge Status", STYLE_PANEL)
+        status = f"Owner: {self.owner}\nTemperature:"
+        "{self.temperature}°C\nItems: {len(self.items)}"
+        console.print(Panel(status, title="Status", style=STYLE_PANEL))
 
-    def handle_choice(self, choice):
-        # Handle the menu selection using match-case
-        match choice:
-            case "1":
-                self.add_item()
-            case "2":
-                self.remove_item()
-            case "3":
-                self.list_items()
-            case "4":
-                self.set_temperature()
-            case "5":
-                self.show_status()
-            case "6":
-                console.print("👋 Goodbye!", style="magenta")
-                return False
-            case _:
-                console.print("❗ Try again.", style="magenta")
+    def display_menu(self):
+        console.print()
+        self.print_panel("Fridge Menu", STYLE_MENU)
+        for opt in MENU_OPTIONS:
+            console.print(f"[cyan]{opt}[/cyan]")
+
+    def evaluate_choice(self, choice):
+        actions = {
+            1: self.add_item,
+            2: self.remove_item,
+            3: self.list_items,
+            4: self.set_temperature,
+            5: self.show_status,
+            6: self.exit_program
+        }
+        action = actions.get(choice)
+        if action:
+            action()
+            return choice != EXIT_OPTION
+        console.print("Invalid option. Try again.", style=STYLE_MENU)
         return True
 
-def menu():
-    # Program entry point and menu loop
-    console.print(Panel("Smart Fridge 1.0", style="magenta", expand=False))
-    fridge = SmartRefrigerator(input("👤 Your name: "))
+    def exit_program(self):
+        clear_screen()
+        console.print("Exiting the program... Goodbye!", style=STYLE_EXIT)
+        input("Press Enter to return to the main menu...")
 
-    while True:
-      # Display menu options line by line
-        console.print("[bold magenta]1.[/bold magenta] Add")
-        console.print("[bold magenta]2.[/bold magenta] Remove")
-        console.print("[bold magenta]3.[/bold magenta] List")
-        console.print("[bold magenta]4.[/bold magenta] Temp")
-        console.print("[bold magenta]5.[/bold magenta] Status")
-        console.print("[bold magenta]6.[/bold magenta] Exit")
-        choice = input("👉 Option: ")
-        if not fridge.handle_choice(choice):
-            break
+    def print_panel(self, text, style=STYLE_PANEL):
+        panel = Panel(f"[bold red]{text}[/bold red]", 
+                      box=box.ROUNDED, style=style)
+        console.print(panel)
 
-menu()
+    def menu(self):
+        clear_screen()
+        self.print_panel("Welcome to Smart Fridge", STYLE_PANEL)
+        while True:
+            self.display_menu()
+            try:
+                choice = int(input("Enter your choice: "))
+            except ValueError:
+                console.print("Please enter a number.", style=STYLE_ERROR)
+                continue
+            if not self.evaluate_choice(choice):
+                break
+
+# Run the program
+name = input("Enter your name: ")
+fridge = SmartRefrigerator(name)
+fridge.menu()
