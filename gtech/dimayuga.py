@@ -470,10 +470,9 @@ class RoleplayGame():
         input("\nPress Enter to return...")
 
     def exit_to_main_menu(self):
-        """Exit the game and return to the main program
-        (currently exits Python entirely)."""
+        """Exit the game and return to the main program."""
 
-        exit()
+        return
 
     def menu(self):
         """Display the main game menu and handle user input for
