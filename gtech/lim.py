@@ -6,15 +6,13 @@ import os
 # Constant values
 MIN_GRADE = 70
 MAX_GRADE = 100
-MENU_ADD_STUDENT = "1"
-MENU_ADD_GRADE = "2"
-MENU_VIEW_INFO = "3"
-MENU_COMPUTE_AVERAGE = "4"
 MENU_EXIT = "5"
 YES = "y"
+ZERO = 0
+INDEX_OFFSET = 1
 
 def clear_screen():
-    os.system("cls" if os.name == "nt" else "clear")
+    os.system("cls")
 
 def press_enter():
     Prompt.ask("[italic sky_blue3]\nPress Enter to continue")
@@ -48,7 +46,19 @@ class StudentManager:
         for index, level in enumerate(self.YEAR_LEVELS, start=1):
             print(f"[bold light_cyan1][{index}] | {level}")
 
-    # Method 3: Prompt user to select a valid index from a list
+    # Method 3: Return True if user inputs 'y'
+    def confirm_yes_response(self, prompt_message):
+        while True:
+            response = Prompt.ask(
+                f"\n[steel_blue1]{prompt_message} (y/n)"
+            ).strip().lower()
+
+            if response in ("y", "n"):
+                return response == YES
+            
+            print("[bold red3]Invalid choice. Please enter 'y' or 'n'.")
+    
+    # Method 4: Prompt user to select a valid index from a list
     def prompt_valid_index(self, prompt_message, max_index):
         while True:
             user_input = Prompt.ask(prompt_message).strip()
@@ -56,14 +66,14 @@ class StudentManager:
                 print("[bold red3]Invalid input. Please enter a number.")
                 continue
 
-            index = int(user_input) - 1
-            if not 0 <= index < max_index:
+            index = int(user_input) - INDEX_OFFSET
+            if not ZERO <= index < max_index:
                 print("[bold red3]Invalid selection.")
                 continue
 
             return index
     
-    # Method 4: Add a new student
+    # Method 5: Add a new student
     def add_student(self):
         while True:
             clear_screen()
@@ -82,14 +92,11 @@ class StudentManager:
 
             self.register_new_student(student_name)
 
-            add_another = Prompt.ask(
-                "\n[steel_blue1]Would you like to add another student? (y/n)"
-            ).strip().lower()
-
-            if add_another != YES:
+            if not self.confirm_yes_response(
+                "Would you like to add another student?"):
                 break
 
-    # Method 5: Check if student already exists
+    # Method 6: Check if student already exists
     def is_existing_student(self, student_name):
         if student_name in self.students:
             print("[bold red3]Student already exists. No changes made.")
@@ -97,7 +104,7 @@ class StudentManager:
             return True
         return False
 
-    # Method 6: Register new student
+    # Method 7: Register new student
     def register_new_student(self, student_name):
         print("\n[bold steel_blue1]↓ Year Levels ↓")
         self.display_year_levels()
@@ -115,7 +122,7 @@ class StudentManager:
 
         print("\n[italic dark_sea_green2]Student added successfully!")
 
-    # Method 7: Select a student by name
+    # Method 8: Select a student by name
     def select_student(self):
         clear_screen()
         if not self.students:
@@ -144,27 +151,27 @@ class StudentManager:
 
         return selected
 
-    # Method 8: Prompt subject selection
-    def prompt_subject_selection(self):
+    # Method 9: Prompt subject selection
+    def select_subject(self):
         self.display_subjects()
-        select_subject = Prompt.ask(
+        subject_choice = Prompt.ask(
             "\n[bold steel_blue1]Select a Subject"
         ).strip()
 
-        if not select_subject.isdigit():
+        if not subject_choice.isdigit():
             print("[bold red3]Invalid input. Please enter a number.")
             press_enter()
             return None
 
-        subject_index = int(select_subject) - 1
-        if not 0 <= subject_index < len(self.SUBJECTS):
+        subject_index = int(subject_choice) - INDEX_OFFSET
+        if not ZERO <= subject_index < len(self.SUBJECTS):
             print("[bold red3]Invalid subject selection.")
             press_enter()
             return None
 
         return self.SUBJECTS[subject_index]
 
-    # Method 9: Prompt for a valid grade input
+    # Method 10: Prompt for a valid grade input
     def input_valid_grade(self):
         try:
             grade = float(Prompt.ask(
@@ -180,7 +187,7 @@ class StudentManager:
             press_enter()
             return None
         
-    # Method 10: Confirm grade update if already exists
+    # Method 11: Confirm grade update if already exists
     def confirm_grade_update(self, subject, current_grades):
         print(
             f"\n[bold light_cyan1]{subject} current grades: "
@@ -198,7 +205,7 @@ class StudentManager:
 
         return True
 
-    # Method 11: Add grade to a subject
+    # Method 12: Add grade to a subject
     def add_grade(self):
         clear_screen()
         student_name = self.select_student()
@@ -223,7 +230,7 @@ class StudentManager:
 
             print("\n[bold steel_blue1]↓ Subjects ↓")
 
-            subject = self.prompt_subject_selection()
+            subject = self.select_subject()
             if subject is None:
                 continue
 
@@ -241,18 +248,15 @@ class StudentManager:
 
             status = "updated" if current_grades else "added"
             print(
-                f"[italic dark_sea_green2]Grade {status} "
+                f"\n[italic dark_sea_green2]Grade {status} "
                 f"successfully for {subject}."
             )
 
-            add_another = Prompt.ask(
-                "\n[steel_blue1]Add another grade? (y/n)"
-            ).strip().lower()
-
-            if add_another != YES:
+            if not self.confirm_yes_response(
+                "Add another grade?"):
                 break
     
-    # Method 12: View student info and grades
+    # Method 13: View student info and grades
     def view_student_info(self):
         while True:
             student_name = self.select_student()
@@ -286,14 +290,11 @@ class StudentManager:
                     f"[bold deep_sky_blue4]{grade_list}"
                 )
 
-            view_another = Prompt.ask(
-                "\n[steel_blue1]View another student? (y/n)"
-            ).strip().lower()
-
-            if view_another != YES:
+            if not self.confirm_yes_response(
+                "View another student?"):
                 break
     
-    # Method 13: Compute average of student grades
+    # Method 14: Compute average of student grades
     def compute_average(self):
         while True:
             clear_screen()
@@ -307,7 +308,7 @@ class StudentManager:
             total = sum(sum(grades) for grades in subjects.values())
             count = sum(len(grades) for grades in subjects.values())
 
-            if count == 0:
+            if count == ZERO:
                 print("[bold red3]No grades to compute average.")
                 press_enter()
                 return
@@ -330,19 +331,16 @@ class StudentManager:
                 f"[bold deep_sky_blue4]{average:.2f}"
             )
 
-            compute_another = Prompt.ask(
-                "\n[steel_blue1]Compute another average? (y/n)"
-            ).strip().lower()
-
-            if compute_another != YES:
+            if not self.confirm_yes_response(
+                "Compute another average?"):
                 break
 
     def menu(self):
         OPTIONS = {
-            MENU_ADD_STUDENT: self.add_student,
-            MENU_ADD_GRADE: self.add_grade,
-            MENU_VIEW_INFO: self.view_student_info,
-            MENU_COMPUTE_AVERAGE: self.compute_average,
+            "1": self.add_student,
+            "2": self.add_grade,
+            "3": self.view_student_info,
+            "4": self.compute_average,
             MENU_EXIT: self.exit_program
         }
 
