@@ -39,17 +39,16 @@ class StudentManager:
         self.grade_input = None
         self.last_action = None
 
-    # Method 1: Display all subjects
+    # Display all subjects
     def display_subjects(self):
         for index, subject in enumerate(self.SUBJECTS, INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {subject}")
 
-    # Method 2: Display all year levels
+    # Display all year levels
     def display_year_levels(self):
         for index, level in enumerate(self.YEAR_LEVELS, INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {level}")
 
-    # Method 3: Return True if user inputs 'y'
     def confirm_yes_response(self, prompt_message):
         while True:
             response = Prompt.ask(
@@ -61,7 +60,6 @@ class StudentManager:
             
             print("[bold red3]Invalid choice. Please enter 'y' or 'n'.")
     
-    # Method 4: Prompt user to select a valid index from a list
     def prompt_valid_index(self, prompt_message, max_index):
         while True:
             user_input = Prompt.ask(prompt_message).strip()
@@ -76,7 +74,7 @@ class StudentManager:
 
             return index
     
-    # Method 5: Add a new student
+    # Method 1: Add a new student
     def add_student(self):
         while True:
             clear_screen()
@@ -99,7 +97,6 @@ class StudentManager:
                 "Would you like to add another student?"):
                 break
 
-    # Method 6: Check if student already exists
     def is_existing_student(self, student_name):
         if student_name in self.students:
             print("[bold red3]Student already exists. No changes made.")
@@ -107,7 +104,6 @@ class StudentManager:
             return True
         return False
 
-    # Method 7: Register new student
     def register_new_student(self, student_name):
         print("\n[bold steel_blue1]↓ Year Levels ↓")
         self.display_year_levels()
@@ -125,7 +121,6 @@ class StudentManager:
 
         print("\n[italic dark_sea_green2]Student added successfully!")
 
-    # Method 8: Select a student by name
     def select_student(self):
         clear_screen()
         if not self.students:
@@ -154,7 +149,6 @@ class StudentManager:
 
         return selected
 
-    # Method 9: Prompt subject selection
     def select_subject(self):
         self.display_subjects()
         subject_choice = Prompt.ask(
@@ -175,7 +169,6 @@ class StudentManager:
         self.selected_subject = self.SUBJECTS[subject_index]
         return self.selected_subject
 
-    # Method 10: Prompt for a valid grade input
     def input_valid_grade(self):
         try:
             grade = float(Prompt.ask(
@@ -191,7 +184,6 @@ class StudentManager:
             press_enter()
             return None
         
-    # Method 11: Confirm grade update if already exists
     def confirm_grade_update(self, subject, current_grades):
         print(
             f"\n[bold light_cyan1]{subject} current grades: "
@@ -209,7 +201,7 @@ class StudentManager:
 
         return True
 
-    # Method 12: Add grade to a subject
+    # Method 2: Add grade to a subject
     def add_grade(self):
         clear_screen()
         student_name = self.select_student()
@@ -273,7 +265,7 @@ class StudentManager:
                 "Add another grade?"):
                 break
     
-    # Method 13: View student info and grades
+    # Method 3: View student info and grades
     def view_student_info(self):
         while True:
             student_name = self.select_student()
@@ -311,7 +303,7 @@ class StudentManager:
                 "View another student?"):
                 break
     
-    # Method 14: Compute average of student grades
+    # Method 4: Compute average of student grades
     def compute_average(self):
         while True:
             clear_screen()
@@ -352,7 +344,7 @@ class StudentManager:
                 "Compute another average?"):
                 break
 
-    # Method 15: Generate a brief summary of total students
+    # Method 5: Generate a brief summary of total students
     def generate_summary(self):
         clear_screen()
         total_students = len(self.students)
