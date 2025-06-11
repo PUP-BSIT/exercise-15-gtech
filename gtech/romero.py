@@ -4,7 +4,6 @@ from rich.panel import Panel
 from rich import box
 
 # Constants
-DEFAULT_TEMPERATURE = 4
 EXIT_OPTION = 6
 STYLE_PANEL = "green"
 STYLE_MENU = "magenta"
@@ -28,7 +27,7 @@ def clear_screen():
 class SmartRefrigerator:
     def __init__(self, owner_name):
         self.owner = owner_name
-        self.temperature = DEFAULT_TEMPERATURE
+        self.temperature = None  # No default temperature
         self.items = []
 
     def add_item(self):
@@ -47,14 +46,14 @@ class SmartRefrigerator:
             console.print(f"[bold magenta]{item}[/bold magenta] removed.")
         else:
             console.print(f"[bold magenta]{item}[/bold magenta] not found.", 
-                            style=STYLE_ERROR)
+                          style=STYLE_ERROR)
 
     def list_items(self):
         clear_screen()
         self.print_panel("List Items", STYLE_PANEL)
         if self.items:
-            console.print("[bold magenta]Items:[/bold magenta] " + ", "
-                          .join(self.items))
+            console.print("[bold magenta]Items:[/bold magenta] " + ", ".
+                          join(self.items))
         else:
             console.print("[bold magenta]The refrigerator is empty."
                              "[/bold magenta]")
@@ -65,16 +64,24 @@ class SmartRefrigerator:
         try:
             temp = int(input("New temperature (°C): "))
             self.temperature = temp
-            console.print(f"Temperature set to [bold magenta]{temp}°C"
-                          "[/bold magenta].")
+            console.print(f"Temperature is already set! [bold magenta]")
+                          
         except ValueError:
             console.print("Enter a valid number.", style=STYLE_ERROR)
 
     def show_status(self):
         clear_screen()
         self.print_panel("Fridge Status", STYLE_PANEL)
-        status = f"Owner: {self.owner}\nTemperature:"
-        "{self.temperature}°C\nItems: {len(self.items)}"
+        temp_display = (f"{self.temperature}°C"
+                         if self.temperature is not None 
+                         else "Not Set"
+                        )
+
+        status = (
+            f"Owner: {self.owner}\n"
+            f"Current Temperature: {temp_display}\n"
+            f"Items: {len(self.items)}"
+        )
         console.print(Panel(status, title="Status", style=STYLE_PANEL))
 
     def display_menu(self):
@@ -121,7 +128,7 @@ class SmartRefrigerator:
                 continue
             if not self.evaluate_choice(choice):
                 break
-
-# Run the program
+            
+# Main program starts here
 name = input("Enter your name: ")
 fridge = SmartRefrigerator(name)
