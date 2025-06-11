@@ -41,12 +41,12 @@ class StudentManager:
 
     # Method 1: Display all subjects
     def display_subjects(self):
-        for index, subject in enumerate(self.SUBJECTS, start=INDEX_OFFSET):
+        for index, subject in enumerate(self.SUBJECTS, INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {subject}")
 
     # Method 2: Display all year levels
     def display_year_levels(self):
-        for index, level in enumerate(self.YEAR_LEVELS, start=INDEX_OFFSET):
+        for index, level in enumerate(self.YEAR_LEVELS, INDEX_OFFSET):
             print(f"[bold light_cyan1][{index}] | {level}")
 
     # Method 3: Return True if user inputs 'y'
@@ -398,9 +398,5 @@ class StudentManager:
             "[italic steel_blue1][2] Add Grade",
             "[italic steel_blue1][3] View Student Info",
             "[italic steel_blue1][4] Compute Average",
-            "[italic steel_blue1][5] Exit"
+            "[italic steel_blue1][5] Return to Team Menu"
         ]))
-
-# Add to main.py
-lim = StudentManager()
-lim.menu()
