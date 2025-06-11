@@ -505,6 +505,3 @@ class RoleplayGame():
             choice = input("Enter a choice: ").strip()
 
             self.option_logic(choice, MENU_OPTIONS, None)
-
-main = RoleplayGame()
-main.menu()
