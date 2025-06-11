@@ -11,14 +11,16 @@ from gtech.romero import SmartRefrigerator
 
 console = Console()
 
+# Use None for Romero initially; we'll instantiate later
 TEAM_MEMBERS_LIST = {
     1: ("Aragon", ChickFlickRecommender()),
     2: ("Dimayuga", RoleplayGame()),
     3: ("Lopez", MovieTicket()),
     4: ("Lim", StudentManager()),
-    5: ("Romero", None)  # We'll instantiate SmartRefrigerator later
+    5: ("Romero", None),  # Delay instantiation
 }
 
+ROMERO_NAME = "Romero"
 EXIT_OPTION = max(TEAM_MEMBERS_LIST.keys()) + 1
 
 def clear_screen():
@@ -48,10 +50,12 @@ def handle_choice(choice):
     if choice in TEAM_MEMBERS_LIST:
         name, instance = TEAM_MEMBERS_LIST[choice]
 
-        if choice == 5:  # Romero's module
+        # Special handling for Romero: prompt for owner name and instantiate
+        if name == ROMERO_NAME:
             clear_screen()
             owner = input("Enter your name: ")
             instance = SmartRefrigerator(owner)
+            TEAM_MEMBERS_LIST[choice] = (name, instance)
 
         if instance is not None:
             instance.menu()
