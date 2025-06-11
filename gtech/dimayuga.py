@@ -471,36 +471,38 @@ class RoleplayGame():
 
     def exit_to_main_menu(self):
         """Exit the game and return to the main program."""
-        
         self.clear_screen()
+        return
 
     def menu(self):
-        """Display the main game menu and handle user input for
-        navigation and actions."""
-
+        """Display the main game menu and handle user input for navigation and actions."""
         MENU_OPTIONS = {
             "1": self.set_character,
             "2": self.character_profile,
             "3": self.attack_monster,
             "4": self.attack_boss,
-            "5": self.train,
-            "0": self.exit_to_main_menu,
+            "5": self.train
         }
+        
+        EXIT_OPTION = "0"
 
         while True:
             self.clear_screen()
+            print("=" * 50)
+            print(f"{'Roleplay Game Main Menu':^50}")
+            print("=" * 50)
+            print("1. Create a Character")
+            print("2. View Character Profile")
+            print("3. Battle a Monster")
+            print("4. Battle a Boss")
+            print("5. Train")
+            print("0. Exit")
+            print("=" * 50)
 
-            print("=" * 30)
-            print(f"{'Mini RPG - Menu':^30}")
-            print("=" * 30)
-            print(f"[1] Create Character")
-            print(f"[2] Character Profile")
-            print(f"[3] Attack a Monster")
-            print(f"[4] Attack the Boss")
-            print(f"[5] Train at Dojo")
-            print(f"[0] Exit to Main Menu")
-            print("=" * 30)
+            choice = input("Choose an option: ").strip()
 
-            choice = input("Enter a choice: ").strip()
+            if choice == EXIT_OPTION:
+                print("Exiting game...")
+                break
 
             self.option_logic(choice, MENU_OPTIONS, None)

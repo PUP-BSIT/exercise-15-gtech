@@ -25,7 +25,7 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 class SmartRefrigerator:
-    def __init__(self, owner_name):
+    def __init__(self, owner_name = None):
         self.owner = owner_name
         self.temperature = None  # No default temperature
         self.items = []
@@ -128,8 +128,3 @@ class SmartRefrigerator:
                 continue
             if not self.evaluate_choice(choice):
                 break
-            
-# Main program starts here
-name = input("Enter your name: ")
-fridge = SmartRefrigerator(name)
-fridge.menu()
