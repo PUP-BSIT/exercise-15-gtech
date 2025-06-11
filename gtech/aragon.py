@@ -275,8 +275,8 @@ class ChickFlickRecommender:
         character = random.choice(mood_characters)
 
         text = Text()
-        text.append("You are chick flick character is..\n\n", style="bold")
-        text.append(f" {character} ", style="magenta bold italic")
+        text.append("Your chick flick character is..\n\n", style="bold")
+        text.append(f"{character} ", style="magenta bold italic")
         console.print(Panel(
                 text, title="⋆˚࿔ Your Chick Flick Character ⋆˚࿔", 
                 border_style="magenta", expand=True))
