@@ -128,7 +128,8 @@ class SmartRefrigerator:
                 continue
             if not self.evaluate_choice(choice):
                 break
-
+            
+# Main program starts here
 name = input("Enter your name: ")
 fridge = SmartRefrigerator(name)
 fridge.menu()
