@@ -64,8 +64,8 @@ class SmartRefrigerator:
         try:
             temp = int(input("New temperature (°C): "))
             self.temperature = temp
-            console.print(f"Temperature set to [bold magenta]"
-                          "{temp}°C[/bold magenta].")
+            console.print(f"Temperature is already set! [bold magenta]")
+                          
         except ValueError:
             console.print("Enter a valid number.", style=STYLE_ERROR)
 
@@ -75,7 +75,8 @@ class SmartRefrigerator:
         temp_display = (f"{self.temperature}°C"
                          if self.temperature is not None 
                          else "Not Set"
-                       )
+                        )
+
         status = (
             f"Owner: {self.owner}\n"
             f"Current Temperature: {temp_display}\n"
@@ -127,8 +128,8 @@ class SmartRefrigerator:
                 continue
             if not self.evaluate_choice(choice):
                 break
-
-# Run the program
+            
+# Main program starts here
 name = input("Enter your name: ")
 fridge = SmartRefrigerator(name)
 fridge.menu()
