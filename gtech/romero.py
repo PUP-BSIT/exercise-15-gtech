@@ -45,8 +45,8 @@ class SmartRefrigerator:
             self.items.remove(item)
             console.print(f"[bold magenta]{item}[/bold magenta] removed.")
         else:
-            console.print(f"[bold magenta]{item}[/bold magenta] not found.", 
-                          style=STYLE_ERROR)
+            console.print(f"[bold magenta]{item}[/bold magenta] not found.",
+                           style=STYLE_ERROR)
 
     def list_items(self):
         clear_screen()
@@ -56,7 +56,7 @@ class SmartRefrigerator:
                           join(self.items))
         else:
             console.print("[bold magenta]The refrigerator is empty."
-                             "[/bold magenta]")
+                            "[/bold magenta]")
 
     def set_temperature(self):
         clear_screen()
@@ -65,18 +65,18 @@ class SmartRefrigerator:
             temp = int(input("New temperature (°C): "))
             self.temperature = temp
             console.print(f"Temperature is already set! [bold magenta]")
-                          
+
         except ValueError:
             console.print("Enter a valid number.", style=STYLE_ERROR)
 
     def show_status(self):
         clear_screen()
         self.print_panel("Fridge Status", STYLE_PANEL)
-        temp_display = (f"{self.temperature}°C"
-                         if self.temperature is not None 
-                         else "Not Set"
-                        )
-
+        temp_display = (
+            f"{self.temperature}°C"
+            if self.temperature is not None
+            else "Not Set"
+        )
         status = (
             f"Owner: {self.owner}\n"
             f"Current Temperature: {temp_display}\n"
