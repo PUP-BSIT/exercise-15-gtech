@@ -218,7 +218,7 @@ class ChickFlickRecommender:
         text.append(f"“{quote}”", style="yellow italic")
         console.print(Panel(text, title="⋆˚࿔ Chick Flick Quote ⋆˚࿔", 
                      border_style="magenta", expand=True))
-        input("\nPress ENTER to return to MENU.")
+        input("\nPress ENTER to CONTINUE.")
 
     # Prompts the user to set a mood before accessing certain features
     def prompt_mood(self):
@@ -328,6 +328,3 @@ class ChickFlickRecommender:
             choice = console.input("Enter your choice: ").strip()
             if self.handle_choice(choice, options):
                 break
-
-recommender = ChickFlickRecommender()
-recommender.menu()
