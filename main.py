@@ -7,7 +7,7 @@ from rich import box
 console = Console()
 
 # Constants
-TEAM_OPTIONS = {
+TEAM_MEMBERS_LIST = {
    1: ("Aragon", None),
    2: ("Dimayuga", None),
    3: ("Lopez", None),
@@ -15,7 +15,7 @@ TEAM_OPTIONS = {
    5: ("Romero", None)
 }
 
-EXIT_OPTION = max(TEAM_OPTIONS.keys()) + 1
+EXIT_OPTION = max(TEAM_MEMBERS_LIST.keys()) + 1
 
 def clear_screen():
    os.system("cls" if os.name == "nt" else "clear")
@@ -31,27 +31,33 @@ def print_title(text):
 
 def display_menu():
       print_title("[bold yellow]Welcome to GTech's Main Menu![/bold yellow]")
-      for key, (name, _) in TEAM_OPTIONS.items():
+      for key, (name, _) in TEAM_MEMBERS_LIST.items():
          console.print(f"[green]{key}. {name}")
       console.print(f"[green]{EXIT_OPTION}. Exit")
 
 def handle_choice(choice):
-   match choice:
-      case n if n in TEAM_OPTIONS:
-         name, instance = TEAM_OPTIONS[n]
-         if instance:
-            instance.menu()
-         else:
-            console.print(f"[blue]{name} has no module linked yet.[/blue]")
-            input("Press Enter to return to the menu...")
-      case n if n == EXIT_OPTION:
-         clear_screen()
-         console.print("[bold red]Exiting program... Goodbye!")
-         return False
-      case _:
-         console.print("[red]Invalid option. Try again.[/red]")
-         input("Press Enter to continue...")
-   return True
+   # Guard clause for exit option
+    if choice == EXIT_OPTION:
+      clear_screen()
+      console.print("[bold red]Exiting program... Goodbye![/bold red]")
+      return False
+
+   # Handle valid team member selections
+    if choice in TEAM_MEMBERS_LIST:
+      name, instance = TEAM_MEMBERS_LIST[choice]
+
+      if not instance:
+         console.print(f"[blue]{name} has no module linked yet.[/blue]")
+         input("Press Enter to return to the menu...")
+         return True
+
+      instance.menu()
+      return True
+
+   # Default case for invalid input
+    console.print("[red]Invalid option. Try again.[/red]")
+    input("Press Enter to continue...")
+    return True
 
 def main():
    running = True
