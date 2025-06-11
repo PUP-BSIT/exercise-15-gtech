@@ -5,7 +5,7 @@ from unique_names_generator.data import (ADJECTIVES,
                                          ANIMALS, 
                                          STAR_WARS)
 
-class Main():
+class RoleplayGame():
     VALID_WEAPONS = {
                     "sword": {
                             "defense": 3, 
@@ -70,7 +70,7 @@ class Main():
                                 "defense": (40, 50)
                             }
                     }
-    
+    ZERO_HEALTH = 0
     def __init__(
                 self,
                 name = None,
@@ -87,6 +87,9 @@ class Main():
                 monster_defense = 0
                  ):
         
+        """Initialize the RoleplayGame character and monster attributes with 
+        optional defaults."""
+        
         self.name = name
         self.health = health
         self.role = role
@@ -101,6 +104,7 @@ class Main():
         self.monster_defense = monster_defense
         
     def character_profile(self):
+        """Display the current character's stats and profile details."""
         
         if self.role == None:
             print("You do not have a character yet")
@@ -119,6 +123,8 @@ class Main():
         print("=" * 30)
 
     def set_character(self):
+        """Prompt the user to create a new character by choosing a name, 
+        role, and weapon."""
         
         self.name = input("Enter a name: ")
         
@@ -135,6 +141,8 @@ class Main():
         self.weapon_stats()
             
     def role_stats(self):
+        """Assign random defense and attack stats based on the selected role."""
+        
         initial_stats = self.VALID_ROLES[self.role]
 
         if initial_stats:
@@ -144,6 +152,9 @@ class Main():
             self.original_health = self.health 
         
     def weapon_stats(self):
+        """Apply weapon stat bonuses to the character's base defense 
+        and attack."""
+        
         stat_boost = self.VALID_WEAPONS[self.weapon]
 
         if stat_boost:
@@ -151,6 +162,9 @@ class Main():
             self.attack += stat_boost["attack"]
     
     def level_up(self):
+        """Increase the character's level and boost health, defense, 
+        and attack stats."""
+        
         get_stat = self.STAT_INCREASE
 
         self.clear_screen()
@@ -165,6 +179,9 @@ class Main():
         self.character_profile()
 
     def generate_monster(self):
+        """Create a new monster with randomly generated stats and 
+        a random name."""
+        
         monster_stats = self.MONSTER_STAT["monster"]
 
         self.monster_name = get_monster_name(combo=[
@@ -179,6 +196,9 @@ class Main():
             self.monster_health = random.randint(*monster_stats["health"])
             
     def generate_boss(self):
+        """Create a boss monster with stronger randomly generated 
+        stats and a themed name."""
+        
         boss_stats = self.MONSTER_STAT["boss"]
 
         self.monster_name = get_monster_name(combo=[
@@ -193,6 +213,8 @@ class Main():
             self.monster_health = random.randint(*boss_stats["health"])
     
     def monster_profile(self):
+        """Display the current monster's stats and name."""
+        
         print("=" * 30)
         print(f"{'Monster Profile':^30}")
         print("=" * 30)
@@ -203,6 +225,9 @@ class Main():
         print("=" * 30)
         
     def attack_monster(self):
+        """Run the battle sequence against a regular monster, including 
+        user interaction and outcome handling."""
+        
         ACTION_OPTIONS = {
             "attack": self.action_attack,
             "run": self.action_run
@@ -223,7 +248,8 @@ class Main():
         print(f"A {self.monster_name} has appeared!")
         print("-" * 50)
 
-        while self.health > 0 and self.monster_health > 0:
+        while (self.health > self.ZERO_HEALTH 
+               and self.monster_health > self.ZERO_HEALTH):
             self.clear_screen()
             self.monster_profile()
             print("\n" + "=" * 50)
@@ -250,17 +276,25 @@ class Main():
                 break
 
     def action_attack(self):
+        """Calculate and apply damage to the monster based on the player's 
+        attack and monster's defense."""
+        
         damage = max(self.attack - self.monster_defense, 0)
         self.monster_health -= damage
         print(f"You attacked {self.monster_name} for {damage} damage.")
 
     def action_run(self):
+        """Handle logic when the player decides to flee from battle 
+        and reset health."""
+        
         print("You chose to run away from the battle.")
         input("Press Enter to return to the menu...")
         self.health = self.original_health
         return self.menu()
 
     def is_monster_defeated(self):
+        """Check if the monster has been defeated and process victory events."""
+        
         if self.monster_health <= 0:
             self.clear_screen()
             print("\n" + "-" * 50)
@@ -274,6 +308,8 @@ class Main():
         return False
 
     def is_player_defeated(self):
+        """Check if the player has been defeated and handle game over logic."""
+        
         if self.health <= 0:
             self.clear_screen()
             print("\n" + "-" * 50)
@@ -286,18 +322,26 @@ class Main():
         return False
 
     def action_monster_attack(self):
+        """Handle the monster's attack action during its turn in battle."""
+        
         damage = max(self.monster_attack - self.defense, 0)
         self.health -= damage
         print(f"{self.monster_name} attacked you for {damage} damage.")
         input("Press Enter to continue...")
 
     def action_monster_defend(self):
+        """Increase the monster's defense during its turn as a 
+        defensive move."""
+        
         boost = random.randint(2, 5)
         self.monster_defense += boost
         print(f"{self.monster_name} increased its defense by {boost}.")
         input("Press Enter to continue...")
     
     def attack_boss(self):
+        """Run the battle sequence against a boss monster, including 
+        combat and turn logic."""
+        
         ACTION_OPTIONS = {
             "attack": self.action_attack,
             "run": self.action_run
@@ -318,7 +362,8 @@ class Main():
         print(f"The {self.monster_name} has appeared!")
         print("-" * 50)
 
-        while self.health > 0 and self.monster_health > 0:
+        while (self.health > self.ZERO_HEALTH 
+               and self.monster_health > self.ZERO_HEALTH):
             self.clear_screen()
             self.monster_profile()
             print("\n" + "=" * 50)
@@ -345,6 +390,9 @@ class Main():
                 break
             
     def train(self):
+        """Allow the player to improve their character by selecting a 
+        training intensity, resulting in stat gains."""
+        
         if self.role is None:
             print("You do not have a character yet. Please create one "
                   "before training.")
@@ -393,15 +441,21 @@ class Main():
 
     @staticmethod
     def clear_screen():
+        """Clear the console screen output using an ANSI escape sequence."""
+        
         return print("\033c", end="")
 
     @staticmethod
     def is_valid(value, valid_set):
+        """Check if the provided value exists in the given set or dictionary."""
         if value in valid_set:
             return True
         return False
     
     def option_logic(self, choice, OPTIONS, condition = None):
+        """Safely invoke the function associated with a menu or action 
+        choice, if valid."""
+        
         if not self.is_valid(choice, OPTIONS):
             print("Invalid choice. Try again.")
             input("Press Enter to continue...")
@@ -415,9 +469,14 @@ class Main():
         input("\nPress Enter to return...")
         
     def exit_to_main_menu(self):
+        """Exit the game and return to the main program 
+        (currently exits Python entirely)."""
         exit()
         
     def menu(self):
+        """Display the main game menu and handle user input for 
+        navigation and actions."""
+        
         MENU_OPTIONS = {
             "1": self.set_character,
             "2": self.character_profile,
@@ -444,7 +503,4 @@ class Main():
             choice = input("Enter a choice: ").strip()
 
             self.option_logic(choice, MENU_OPTIONS, None)
-
-start = Main()
-start.menu()
         
