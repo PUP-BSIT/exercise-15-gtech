@@ -64,8 +64,8 @@ class SmartRefrigerator:
         try:
             temp = int(input("New temperature (°C): "))
             self.temperature = temp
-            console.print(f"Temperature set to [bold magenta]"
-                          "{self.temperature}°C[/bold magenta].")
+            console.print(f"Temperature is already set! [bold magenta]")
+
         except ValueError:
             console.print("Enter a valid number.", style=STYLE_ERROR)
 
