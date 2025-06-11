@@ -4,16 +4,13 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-console = Console()
-
 # Constants
 MAX_RECOMMENDATIONS = 6
+MIN_MENU_OPTION = 1 
+INDEX_SET = 1 
+EXIT_OPTION = "4"
 
-# Menu option constants
-OPTION_SET_MOOD = '1'
-OPTION_GET_RECOMMENDATIONS = '2'
-OPTION_GET_QUOTE = '3'
-OPTION_RETURN = '4'
+console = Console()
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -21,20 +18,20 @@ def clear():
 # Main class for the Chick Flick Recommender system
 class ChickFlickRecommender:
     def __init__(self):
-    # Dictionaries to store movie, mood, and recommended movies
+    # Dictionary to store movie, initializer for user mood recommended movies
         self.movies = {}
         self.user_mood = None
         self.recommendations = []
 
     def load_movies(self):
-    # Method 1: Loads predefined movie titles and quotes
+    # Loads predefined movie titles and quotes
         self.movies = {
             "romantic": {
                 "movies": [
                     "The Notebook", 
-                    "How to Lose a Guy in 10 Days",
-                    "Notting Hill", 
-                    "10 Things I Hate About You",
+                    "How to Lose a Guy in 10 Days", 
+                    "Notting Hill",
+                    "10 Things I Hate About You", 
                     "Letters to Juliet", 
                     "Pretty Woman"
                 ],
@@ -50,7 +47,7 @@ class ChickFlickRecommender:
             "empowered": {
                 "movies": [
                     "Legally Blonde", 
-                    "The First Wives Club",
+                    "The First Wives Club", 
                     "The Devil Wears Prada", 
                     "Hidden Figures"
                 ],
@@ -96,100 +93,135 @@ class ChickFlickRecommender:
         }
 
     def list_moods(self):
-    # Method 2: Lists all available moods that the user can choose from
+    # Lists all available moods that the user can choose from
         if not self.movies:
             console.print("No movie categories loaded.")
             return []
-
+    
         mood_text = Text()
-        for index_mood, mood in enumerate(self.movies.keys(), start=1):
+        # Enumerate through each mood and append to the display text
+        for index_mood, mood in enumerate(self.movies, INDEX_SET):
             mood_text.append(f"{index_mood}. {mood.capitalize()}\n")
 
-        # Displays all the available moods 
-        console.print(Panel(mood_text, title="⋆˚࿔ Available Moods ⋆˚࿔", 
-                      border_style="magenta", expand=True))
-        return list(self.movies.keys())
+        # Displays all the available moods
+        console.print(Panel(mood_text, title="⋆˚࿔ Available Moods ⋆˚࿔",
+                            border_style="magenta", expand=True))
+        return list(self.movies)
 
     def set_mood(self):
-    # Method 3: Allows user to select their mood from the available options
+    # Allows user to select their mood from the available options
         clear()
         available_moods = self.list_moods()
         if not available_moods:
             return
 
-        while True:
-        # Prompts the user to select a mood from the list and validate input
-            try:
-                user_input = console.input(f"Select your mood (1-{len
-                            (available_moods)}): ").strip()
-                choice = int(user_input)
+        choice = None
+        while choice is None:
+            # Get and validate user input until valid
+            choice = self.get_user_mood(available_moods)
+        # Store the selected mood
+        self.confirm_mood(choice, available_moods)
 
-                # Display confirmation
-                if 1 <= choice <= len(available_moods):
-                    self.user_mood = available_moods[choice - 1]
-                    mood_text = Text("Mood set to '", style="")
-                    mood_text.append(self.user_mood, style="magenta bold")
-                    mood_text.append("'.", style="")
+    def get_user_mood(self, moods):
+    # Asks user to input a mood choice and validates 
+        user_input = console.input(
+            f"Select your mood ({MIN_MENU_OPTION}-{len(moods)}): ").strip()
+        try:
+            choice = int(user_input)
+        except ValueError:
+            console.print("\n\n[red]Invalid input. Please enter a" 
+                          " whole number.[/red]")
+            return None
+        if not (MIN_MENU_OPTION <= choice <= len(moods)):
+            console.print(f"\n\n[red]Enter a number between {MIN_MENU_OPTION}"
+                        f" and {len(moods)}.[/red]")
+            return None
+        return choice
 
-                    console.print(Panel(
-                    mood_text,
-                    title="⋆˚࿔ Mood Confirmed ⋆˚࿔",
-                    border_style="magenta",
-                ))
-                    input("\nPress ENTER to return to MENU.")
-                    break
-                else:
-                    console.print(
-                    f"\n\n[red]Enter a number between 1 and "
-                    f"{len(available_moods)}.[/red]"
-                )
-            except ValueError:
-                console.print("\n\n[red]Invalid input. Please enter a" 
-                             " whole number.[/red]")
-                input("Press ENTER to return to MENU.")
+    def confirm_mood(self, choice, moods):
+    # Confirms and displays the selected mood
+        self.user_mood = moods[choice - INDEX_SET]
+
+        mood_text = Text("Mood set to '")
+        mood_text.append(self.user_mood, style="magenta bold")
+        mood_text.append("'.")
+        console.print(Panel(mood_text, title="⋆˚࿔ Mood Confirmed ⋆˚࿔", 
+                            border_style="magenta"))
+        input("\nPress ENTER to return to MENU.")
 
     def recommend_movies(self):
-    # Method 4: Provides movie recommendations based on the user's mood
+    # Displays recommended movies based on the selected mood
         clear()
-        # If mood not set, prompts the user to set a mood
         if not self.user_mood:
-            console.print(Panel(
-                "[bold red]Please set your mood first.[/bold red]",
-                title="⋆˚࿔ Action Needed ⋆˚࿔",
-                border_style="magenta",
-                expand=True
-            ))
-            input("\nPress ENTER to return to MENU.")
+            self.prompt_mood()
             return
 
-        # Get movie list from the mood data 
         mood_data = self.movies.get(self.user_mood, {})
         movies = mood_data.get("movies", [])
 
-        # Displays if no movies found
         if not movies:
-            console.print(Panel(
-                f"No movies found for the mood '{self.user_mood}'.",
-                title="⋆˚࿔ No Movies ⋆˚࿔",
-                border_style="magenta",
-                expand=True
-            ))
-            input("\nPress ENTER to return to MENU.")
+            self.no_movies_found()
             return
 
-        # Randomly selects movie recommendations up to MAX_RECOMMENDATIONS
-        self.recommendations = random.sample(movies, k=min
-                            (MAX_RECOMMENDATIONS, len(movies)))
+        # Randomly select up to MAX_RECOMMENDATIONS from the list
+        num_movies = min(MAX_RECOMMENDATIONS, len(movies))
+        self.recommendations = random.sample(movies, k=num_movies)
+        self.display_movie_reco()
+
+    def get_quote(self):
+    # Generate random quote based on the user's selected mood
+        clear()
+        if not self.user_mood:
+            self.prompt_mood()
+            return
+
+        mood_data = self.movies.get(self.user_mood, {})
+        quotes_list = mood_data.get("quotes", [])
+
+        if quotes_list:
+            quote = random.choice(quotes_list)
+        else:
+            quote = "No quote available."
         
-        # Display recommended movie based on the user's mood
+        text = Text()
+        text.append(f"Here's a chick flick quote for your '", style="bold")
+        text.append(f"{self.user_mood}", style="magenta bold")
+        text.append("' mood:\n\n", style="bold")
+        text.append(f"“{quote}”", style="yellow italic")
+        console.print(Panel(text, title="⋆˚࿔ Chick Flick Quote ⋆˚࿔",
+                            border_style="magenta", expand=True))
+        input("\nPress ENTER to CONTINUE.")
+
+    def prompt_mood(self):
+    # Prompts the user to set a mood before accessing certain features
+        console.print(Panel(
+            "[bold red]Please set your mood first.[/bold red]",
+            title="⋆˚࿔ Action Needed ⋆˚࿔",
+            border_style="magenta",
+            expand=True
+        ))
+        input("\nPress ENTER to return to MENU.")
+
+    def no_movies_found(self):
+    # Displays an error message when no movies are found 
+        console.print(Panel(
+            f"No movies found for the mood '{self.user_mood}'.",
+            title="⋆˚࿔ No Movies ⋆˚࿔",
+            border_style="magenta",
+            expand=True
+        ))
+        input("\nPress ENTER to return to MENU.")
+
+    def display_movie_reco(self):
+    # Displays a list of movie recommendations for the current mood
         text = Text()
         text.append("Based on your '", style="")
         text.append(f"{self.user_mood}", style="magenta bold")
         text.append("' mood, here are your recommendations:\n\n", style="")
 
-        for index_reco, movie in enumerate(self.recommendations, start=1):
-            text.append(f"{index_reco}. {movie}\n")
-                
+        for index_movie, movie in enumerate(self.recommendations, INDEX_SET):
+            text.append(f"{index_movie}. {movie}\n")
+
         console.print(Panel(
             text,
             title="⋆˚࿔ Movie Recommendations ⋆˚࿔",
@@ -198,80 +230,56 @@ class ChickFlickRecommender:
         ))
         input("\nPress ENTER to return to MENU.")
 
-    def get_chick_flick_quote(self):
-    # Method 5: Displays a randomly selected chick flick quote 
-    # that matches the user's mood
+    def return_team(self):
+    # Handles return to team menu
         clear()
-        # If mood not set, prompts the user to set a mood 
-        if not self.user_mood:
-            console.print(Panel(
-                "[bold red]Please set your mood first.[/bold red]",
-                title="⋆˚࿔ Action Needed ⋆˚࿔",
-                border_style="magenta",
-                expand=True
-            ))
-            input("\nPress ENTER to return to MENU.")
-            return
-        
-        # Generate a random quote based on the user's mood
-        quotes = self.movies.get(self.user_mood, {}).get("quotes", [])
-        quote = random.choice(quotes)
+        console.print("[blue]Thank you for using the Chick Flick Movie "
+                      "Recommender! Returning to Team Menu...[/blue]")
+        input("\nPress ENTER to return to TEAM MENU.")
 
-        text = Text()
-        text.append(f"Here's a chick flick quote for your '", style="bold")
-        text.append(f"{self.user_mood}", style="magenta bold")
-        text.append("' mood:\n\n", style="bold")
-        text.append(f"“{quote}”", style="yellow italic")
+    def menu(self):
+    # Displays main menu and handles user input
+        options = {
+            "1": self.set_mood,
+            "2": self.recommend_movies,
+            "3": self.get_quote,
+            EXIT_OPTION: self.return_team
+        }
 
+        while True:
+            clear()
+            self.display_main_menu()
+            choice = console.input("Enter your choice: ").strip()
+            if self._handle_choice(choice, options):
+                break
+
+    def _handle_choice(self, choice, options):
+    # Executes the selected menu option
+        if choice in options:
+            options[choice]()
+            return choice == EXIT_OPTION
+        self.invalid_choice()
+        return False
+
+    def display_main_menu(self):
+    # Displays menu options
         console.print(Panel(
-            text,
-            title="⋆˚࿔ Chick Flick Quote ⋆˚࿔",
+            "꩜ .ᐟ Set your mood to generate a chick flick movie"
+            " recommendation for you! .☘︎\n\n"
+            "[1] Set My Mood\n"
+            "[2] Get Movie Recommendations\n"
+            "[3] Get a Chick Flick Quote\n"
+            "[4] Return to Team Menu",
+            title="⋆˚࿔ Althea's Chick Flick Recommender ⋆˚࿔",
             border_style="magenta",
             expand=True
         ))
-        input("\nPress ENTER to CONTINUE.")
 
-    def menu(self):
-    # Main menu that loops until the user decides to return to the team menu
-        while True:
-            clear()
-            # Display menu options
-            menu = (
-                "꩜ .ᐟ Set your mood to generate a chick flick movie" 
-                        " recommendation for you! .☘︎\n\n"
-                f"[{OPTION_SET_MOOD}] Set My Mood\n"
-                f"[{OPTION_GET_RECOMMENDATIONS}] Get Movie Recommendations\n"
-                f"[{OPTION_GET_QUOTE}] Get a Chick Flick Quote\n"
-                f"[{OPTION_RETURN}] Return to Team Menu"
-            )
-            console.print(
-            Panel(
-                menu,
-                title="⋆˚࿔ Althea's Chick Flick Recommender ⋆˚࿔",
-                border_style="magenta",
-                expand=True
-            )
-        )
-            # Prompts the user to input a valid choice
-            user_input = input("Enter your choice: ").strip()
-
-            # Handle menu choices using match-case
-            match user_input:
-                case "1":
-                    self.set_mood()
-                case "2":
-                    self.recommend_movies()
-                case "3":
-                    self.get_chick_flick_quote()
-                case "4":
-                    clear()
-                    console.print("[blue]Thank you for using the Chick Flick"
-                        " Movie Recommender! Returning to Team Menu...[/blue]")
-                    input("\nPress ENTER to return to TEAM MENU.")
-                    break
-                case _:
-                    print("\n\nInvalid option. Please choose a valid number.")
-                    input("Press ENTER to try again.")
+    def invalid_choice(self):
+    # Notifies when the user makes an invalid choice
+        console.print(f"\n\n[red]Enter a number between {MIN_MENU_OPTION}"
+                      f" and {EXIT_OPTION}.[/red]")
+        console.input("\nPress ENTER to try again.")
 
 recommender = ChickFlickRecommender()
 recommender.load_movies()
