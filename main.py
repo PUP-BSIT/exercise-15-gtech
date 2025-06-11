@@ -6,54 +6,65 @@ from rich import box
 
 console = Console()
 
+# Constants
+TEAM_OPTIONS = {
+   1: ("Aragon", None),
+   2: ("Dimayuga", None),
+   3: ("Lopez", None),
+   4: ("Lim", None),
+   5: ("Romero", None)
+}
+
+EXIT_OPTION = max(TEAM_OPTIONS.keys()) + 1
+
 def clear_screen():
-    os.system("cls" if os.name == "nt" else "clear")
+   os.system("cls" if os.name == "nt" else "clear")
 
 def print_title(text):
-    panel = Panel(
-        Align.center(text, vertical="middle"),
-        border_style="magenta",
-        width=40,
-        box=box.ROUNDED
-    )
-    console.print(panel)
+   panel = Panel(
+      Align.center(text, vertical="middle"),
+      border_style="magenta",
+      width=40,
+      box=box.ROUNDED
+   )
+   console.print(panel)
 
+def display_menu():
+      print_title("[bold yellow]Welcome to GTech's Main Menu![/bold yellow]")
+      for key, (name, _) in TEAM_OPTIONS.items():
+         console.print(f"[green]{key}. {name}")
+      console.print(f"[green]{EXIT_OPTION}. Exit")
+
+def handle_choice(choice):
+   match choice:
+      case n if n in TEAM_OPTIONS:
+         name, instance = TEAM_OPTIONS[n]
+         if instance:
+            instance.menu()
+         else:
+            console.print(f"[blue]{name} has no module linked yet.[/blue]")
+            input("Press Enter to return to the menu...")
+      case n if n == EXIT_OPTION:
+         clear_screen()
+         console.print("[bold red]Exiting program... Goodbye!")
+         return False
+      case _:
+         console.print("[red]Invalid option. Try again.[/red]")
+         input("Press Enter to continue...")
+   return True
 
 def main():
-   while True:
-        clear_screen()
-        print_title("[bold yellow]Welcome to GTech's Main Menu![/bold yellow]")
-        console.print("[green]1. Aragon")
-        console.print("[green]2. Dimayuga")
-        console.print("[green]3. Lopez")
-        console.print("[green]4. Lim")
-        console.print("[green]5. Romero")
-        console.print("[green]6. Exit")
-
-        #Error Handling of Input/s
-        try:
-         choice = int(input("Select a team member or exit: "))
-        except ValueError:
-         print("Please enter a valid number.")
+   running = True
+   while running:
+      clear_screen()
+      display_menu()
+      try:
+         user_input = int(input("Select a team member or exit: "))
+      except ValueError:
+         console.print("[red]Please enter a valid number.[/red]")
+         input("Press Enter to continue...")
          continue
-
-        match choice:
-         case 1:
-            pass
-         case 2:
-            pass
-         case 3:
-            pass
-         case 4:
-            pass
-         case 5:
-            pass
-         case 6:
-            clear_screen()
-            console.print("[bold red]Exiting program... Goodbye!")
-            break
-         case _:
-            print("Invalid option. Try again.")
+      running = handle_choice(user_input)
 
 main()
 
