@@ -33,8 +33,11 @@ class StudentManager:
         ]
 
     def __init__(self):
-        # Dictionary to store student data
+        # Properties
         self.students = {}
+        self.selected_subject = None
+        self.grade_input = None
+        self.last_action = None
 
     # Method 1: Display all subjects
     def display_subjects(self):
@@ -169,7 +172,8 @@ class StudentManager:
             press_enter()
             return None
 
-        return self.SUBJECTS[subject_index]
+        self.selected_subject = self.SUBJECTS[subject_index]
+        return self.selected_subject
 
     # Method 10: Prompt for a valid grade input
     def input_valid_grade(self):
@@ -193,12 +197,12 @@ class StudentManager:
             f"\n[bold light_cyan1]{subject} current grades: "
             f"[bold deep_sky_blue4]{current_grades}"
         )
-        update = Prompt.ask(
+        update_grade = Prompt.ask(
             "[steel_blue1]Grades already exist. "
             "Do you want to update? (y/n)"
         ).strip().lower()
 
-        if update != YES_RESPONSE:
+        if update_grade != YES_RESPONSE:
             print("[italic red3]Grade not updated.")
             press_enter()
             return False
@@ -245,11 +249,24 @@ class StudentManager:
                 continue
 
             subjects[subject] = [grade]
+            self.grade_input = grade
+            self.last_action = "add_grade"
 
             status = "updated" if current_grades else "added"
             print(
                 f"\n[italic dark_sea_green2]Grade {status} "
                 f"successfully for {subject}."
+            )
+
+            # Grade summary
+            print(
+                f"[bold light_cyan1]↓ Summary"
+                "\n[bold light_cyan1]"
+                f"Student: [bold steel_blue1]{student_name}"
+                "\n[bold light_cyan1]"
+                f"Subject: [bold steel_blue1]{subject}"
+                "\n[bold light_cyan1]"
+                f"Grade: [bold steel_blue1]{self.grade_input}"
             )
 
             if not self.confirm_yes_response(
@@ -325,7 +342,7 @@ class StudentManager:
                 f"[bold deep_sky_blue4]{student['year_level']}"
             )
 
-            average = total // count
+            average = total // count           
             print(
                 "\n[bold light_cyan1]Average Grade: "
                 f"[bold deep_sky_blue4]{average:.2f}"
@@ -352,14 +369,18 @@ class StudentManager:
             ).strip()
 
             action = OPTIONS.get(user_choice)
-            if action:
-                action()
-                if user_choice == MENU_EXIT:
-                    break
-            else:
+
+            if not action:
                 print("[bold red3]Invalid option!"
-                "\nPlease enter a number between 1 and 5.")
+                    "\nPlease enter a number between 1 and 5.")
                 press_enter()
+                continue
+
+            if user_choice == MENU_EXIT:
+                self.exit_program()
+                break
+
+            action()
 
     def exit_program(self):
         clear_screen()
