@@ -52,7 +52,7 @@ class SmartRefrigerator:
         console.print(Panel(status, title="📊 Status", style="magenta"))
 
     def handle_choice(self, choice):
-        # Handle the menu selection using match-case
+        # Handle the menu selection using match-case.
         match choice:
             case "1":
                 self.add_item()
