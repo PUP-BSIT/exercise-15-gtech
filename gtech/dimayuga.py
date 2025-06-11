@@ -471,8 +471,8 @@ class RoleplayGame():
 
     def exit_to_main_menu(self):
         """Exit the game and return to the main program."""
-
-        return
+        
+        self.clear_screen()
 
     def menu(self):
         """Display the main game menu and handle user input for
