@@ -278,6 +278,3 @@ class ChickFlickRecommender:
         console.print(f"\n\n[red]Enter a number between {MIN_MENU_OPTION}"
                       f" and {EXIT_OPTION}.[/red]")
         console.input("\nPress ENTER to try again.")
-
-recommender = ChickFlickRecommender()
-recommender.menu()

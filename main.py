@@ -3,18 +3,24 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.align import Align
 from rich import box
+from gtech.aragon import ChickFlickRecommender
+from gtech.dimayuga import RoleplayGame
+from gtech.lim import StudentManager
+from gtech.lopez import MovieTicket
+from gtech.romero import SmartRefrigerator
 
 console = Console()
 
-# Constants
+# Team members list with menu instances
 TEAM_MEMBERS_LIST = {
-   1: ("Aragon", None),
-   2: ("Dimayuga", None),
-   3: ("Lopez", None),
-   4: ("Lim", None),
-   5: ("Romero", None)
+   1: ("Aragon", ChickFlickRecommender()),
+   2: ("Dimayuga", RoleplayGame()),
+   3: ("Lopez", MovieTicket()),
+   4: ("Lim", StudentManager()),
+   5: ("Romero", SmartRefrigerator())
 }
 
+# Exit option is one number after the last team member
 EXIT_OPTION = max(TEAM_MEMBERS_LIST.keys()) + 1
 
 def clear_screen():
@@ -51,14 +57,15 @@ def handle_choice(choice):
          input("Press Enter to return to the menu...")
          return True
 
+      # Call the selected member's menu() method
       instance.menu()
       return True
 
-   # Default case for invalid input
     console.print("[red]Invalid option. Try again.[/red]")
     input("Press Enter to continue...")
     return True
 
+# Main Menu loop that runs until user chooses to exit
 def main():
    running = True
    while running:
@@ -73,20 +80,3 @@ def main():
       running = handle_choice(user_input)
 
 main()
-
-# TO DO:
-# Create a module with your last name as the module name.
-# - dimayuga
-# - lim
-# - lopez
-
-# TO DO:
-# Create a class with at least 5 methods (excluding constructor) and
-# 3 properties. The implementation is up to you.
-
-# TO DO:
-# Add an additional method called 'menu()' that will display and access all
-# the 5 methods. Make sure it goes back to the main menu.
-
-# TO DO:
-# Keep in mind the Coding Guidelines.

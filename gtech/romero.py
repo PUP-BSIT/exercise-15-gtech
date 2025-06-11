@@ -125,4 +125,3 @@ class SmartRefrigerator:
 # Run the program
 name = input("Enter your name: ")
 fridge = SmartRefrigerator(name)
-fridge.menu()
