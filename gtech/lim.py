@@ -7,7 +7,7 @@ import os
 MIN_GRADE = 70
 MAX_GRADE = 100
 MENU_EXIT = "5"
-YES = "y"
+YES_RESPONSE = "y"
 ZERO = 0
 INDEX_OFFSET = 1
 
@@ -54,7 +54,7 @@ class StudentManager:
             ).strip().lower()
 
             if response in ("y", "n"):
-                return response == YES
+                return response == YES_RESPONSE
             
             print("[bold red3]Invalid choice. Please enter 'y' or 'n'.")
     
@@ -198,7 +198,7 @@ class StudentManager:
             "Do you want to update? (y/n)"
         ).strip().lower()
 
-        if update != YES:
+        if update != YES_RESPONSE:
             print("[italic red3]Grade not updated.")
             press_enter()
             return False
